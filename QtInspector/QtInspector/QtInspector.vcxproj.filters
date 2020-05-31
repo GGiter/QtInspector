@@ -44,6 +44,9 @@
     <ClCompile Include="TestItemModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Delegate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="QtInspector.qrc" />
@@ -58,6 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="TestItemModel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Delegate.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

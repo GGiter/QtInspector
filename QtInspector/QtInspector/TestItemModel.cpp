@@ -76,6 +76,19 @@ int TreeModel::columnCount(const QModelIndex &parent) const
 	return 2;
 }
 
+bool TreeModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+	if (role == Qt::EditRole)
+	{
+		INode* childItem = static_cast<INode*>(index.internalPointer());
+		if (childItem)
+		{
+			childItem->setValue(value.toString());
+		}
+	}
+	return QAbstractItemModel::setData(index,value,role);
+}
+
 
 
 QVariant TreeModel::data(const QModelIndex &index, int role) const
@@ -101,7 +114,14 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 	if (!index.isValid())
 		return 0;
 
-	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+	if (index.column() == 0)
+	{
+		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+	}
+
+	return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+
+
 }
 
 QVariant TreeModel::headerData(int section, Qt::Orientation orientation,

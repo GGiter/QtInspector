@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Delegate.cpp" />
     <ClCompile Include="Reader.cpp" />
     <ClCompile Include="TestItemModel.cpp" />
     <QtRcc Include="QtInspector.qrc" />
@@ -92,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dataTypes.h" />
+    <QtMoc Include="Delegate.h" />
     <ClInclude Include="Reader.h" />
     <QtMoc Include="TestItemModel.h" />
   </ItemGroup>
