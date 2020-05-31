@@ -24,5 +24,6 @@ public:
 private slots:
 	void OnClick();
 private:
+	class TreeModel* tModel;
     Ui::QtInspectorClass ui;
 };

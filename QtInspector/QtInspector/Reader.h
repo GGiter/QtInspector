@@ -17,7 +17,7 @@ private:
 	static int skip_whitespaces(const std::string& source, int i);
 
 	static std::vector<token> tokenize(std::string source);
-	INode* json_parse(std::vector<token> v, int i, int& r, std::string key = "");
+	INode* json_parse(std::vector<token> v, int i, int& r, std::string key = "", INode* parent = nullptr);
 public:
 	INode* last;
 	INode* parse(const std::string& str);

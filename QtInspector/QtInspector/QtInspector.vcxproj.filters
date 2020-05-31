@@ -41,6 +41,9 @@
     <ClCompile Include="Reader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestItemModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="QtInspector.qrc" />
@@ -52,5 +55,10 @@
     <ClInclude Include="Reader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="TestItemModel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

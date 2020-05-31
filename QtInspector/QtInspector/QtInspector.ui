@@ -17,14 +17,24 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>80</y>
+      <x>380</x>
+      <y>310</y>
       <width>75</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QTreeView" name="treeView">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>461</width>
+      <height>301</height>
+     </rect>
     </property>
    </widget>
   </widget>

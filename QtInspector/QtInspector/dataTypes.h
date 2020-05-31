@@ -12,10 +12,11 @@ enum class dataType : char
 class INode
 {
 public:
-	INode(const QString& k, dataType t) : key(k), type(t) {}
+	INode(const QString& k, dataType t,INode* parent = nullptr) : key(k), type(t), parent(parent) {}
 	INode() : key(""), type(dataType::value) {}
 	QString getKey() const { return key; }
 	dataType getType() const { return type; }
+	INode* operator[](int index) { return nullptr; }
 	INode &INode::operator=(const INode & node)
 	{
 		this->key = node.getKey();
@@ -30,17 +31,24 @@ public:
 	{
 		return nullptr;
 	}
-	virtual int size() { return -1; }
+	virtual int size() { return 0; }
+	virtual INode* child(int index) {
+		return nullptr;
+	}
+	INode* getParent() const { return parent; }
+	INode* parent;
+	virtual int find(INode* node) { return -1; }
 protected:
 	QString key;
 	dataType type;
+
 };
 
 
 class IValue : public INode
 {
 public:
-	IValue(const QString& k, const QString& v) : INode(k,dataType::value), value(v) {}
+	IValue(const QString& k, const QString& v, INode* parent = nullptr) : INode(k,dataType::value,parent), value(v) {}
 	QString getValue() const { return value; }
 	IValue &IValue::operator=(const IValue & node)
 	{
@@ -49,6 +57,7 @@ public:
 		this->value = node.getValue();
 		return *this;
 	}
+	virtual int size() { return 0; }
 private:
 	QString value;
 };
@@ -56,12 +65,12 @@ private:
 class IArray : public INode
 {
 public:
-	IArray(const QString& k, const QVector<INode*>& v) : INode(k,dataType::array), values(v) {}
-	IArray(const QString& k) : INode(k, dataType::array) {}
+	IArray(const QString& k, const QVector<INode*>& v,INode* parent = nullptr) : INode(k,dataType::array,parent), values(v) {}
+	IArray(const QString& k, INode* parent = nullptr) : INode(k, dataType::array,parent) {}
 	~IArray() { for (INode* value : values)  delete value; }
 	void addValue(INode* value) { values.push_back(value); }
 	QVector<INode*> getValues() const { return values; }
-	INode* &operator[](int index) { return values[index]; }
+	INode* operator[](int index) { return values[index]; }
 	IArray &IArray::operator=(const IArray & node)
 	{
 		this->key = node.getKey();
@@ -81,6 +90,18 @@ public:
 			return nullptr;
 		return values[values.size() - 1];
 	}
+	virtual int size() override { return values.size(); }
+	virtual INode* child(int index) override {
+		return values[index];
+	}
+	virtual int find(INode* node) override {
+		for (int i = 0; i < values.size(); ++i)
+		{
+			if (values[i] == node)
+				return i;
+		}
+		return -1;
+	}
 private:
 	QVector<INode*> values;
 };
@@ -88,12 +109,12 @@ private:
 class IObject : public INode
 {
 public:
-	IObject(const QString& k, const QVector<INode*>& v) : INode(k,dataType::object), values(v) {}
-	IObject(const QString& k) : INode(k, dataType::object) {}
+	IObject(const QString& k, const QVector<INode*>& v, INode* parent = nullptr) : INode(k,dataType::object, parent), values(v) {}
+	IObject(const QString& k, INode* parent = nullptr) : INode(k, dataType::object, parent) {}
 	~IObject() { for (INode* value : values)  delete value; }
 	void addValue(INode* value) { values.push_back(value); }
 	QVector<INode*> getValues() const { return values; }
-	INode* &operator[](int index) { return values[index]; }
+	INode* operator[](int index) { return values[index]; }
 	IObject &IObject::operator=(const IObject & node)
 	{
 		this->key = node.getKey();
@@ -114,6 +135,17 @@ public:
 		return values[values.size() - 1];
 	}
 	virtual int size() override { return values.size(); }
+	virtual INode* child(int index) override {
+		return values[index];
+	}
+	virtual int find(INode* node) override { 
+		for (int i = 0; i < values.size(); ++i)
+		{
+			if (values[i] == node)
+				return i;
+		}
+		return -1;
+	}
 private:
 	QVector<INode*> values;
 };

@@ -4,12 +4,15 @@
 #include <QDebug>
 #include <QPushButton>
 #include <fstream>
+#include "TestItemModel.h"
 
 QtInspector::QtInspector(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
 	connect(ui.pushButton, &QPushButton::clicked, this, &QtInspector::OnClick);
+	tModel = new TreeModel(this);
+	ui.treeView->setModel(tModel);
 }
 
 void QtInspector::readJson(QString fileName)
@@ -23,10 +26,12 @@ void QtInspector::readJson(QString fileName)
 	{
 		qDebug() << "Object";
 	}
-
-
-	delete root;
 	
+	IObject* root2 = new IObject("Test", { root }, nullptr);
+	root->parent = root2;
+	tModel->root = root2;
+	tModel->reset();	
+	ui.treeView->update();
 }
 INode QtInspector::parseJson(QString data)
 {

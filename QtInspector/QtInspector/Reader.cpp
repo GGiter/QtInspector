@@ -128,21 +128,26 @@ std::vector<Reader::token> Reader::tokenize(std::string source) {
 }
 
 
-INode* Reader::json_parse(std::vector<token> v, int i, int& r , std::string key) {
+INode* Reader::json_parse(std::vector<token> v, int i, int& r , std::string key,INode* parent) {
 
-	qDebug() << i << QString(v[i].value.data()) << QString(key.data());
+	
 	if (v[i].type == CROUSH_OPEN) {
-		
-		qDebug() << "Hello";
-		
+				
 		int k = i + 1;
-		IObject* current = new IObject(QString(v[k].value.data()));
+		IObject* current = new IObject(QString(v[k].value.data()),parent);
+		k = k + 1;
 		while (v[k].type != CROUSH_CLOSE && k < v.size()) {
+
 			std::string key = v[k].value;
-			k += 2; // k+1 should be ':'
+			k += 2; 
 			int j = k;
-			INode* vv = json_parse(v, k, j, key);
-			current->addValue(vv);
+			INode* vv = json_parse(v, k, j, key,current);
+			if (vv)
+			{
+				qDebug() << vv->getKey();
+				current->addValue(vv);
+			}
+			
 			k = j;
 			if (v[k].type == COMMA) k++;
 		}
@@ -151,30 +156,30 @@ INode* Reader::json_parse(std::vector<token> v, int i, int& r , std::string key)
 		return current;
 	}
 	if (v[i].type == BRACKET_OPEN) {
-		IArray* current = new IArray(QString(key.data()));
+		IArray* current = new IArray(QString(v[i-2].value.data()),parent);
 		int k = i + 1;
 		while (v[k].type != BRACKET_CLOSE && k < v.size() ) {
 			int j = k;
-			INode* vv = json_parse(v, k, j, key);
+			INode* vv = json_parse(v, k, j, v[i - 2].value,current);
 			current->addValue(vv);
 			k = j;
 			if (v[k].type == COMMA) k++;
 		}
 		r = k + 1;
-		last = current;
+		//last = current;
 		return current;
 	}
 	if (v[i].type == NUMBER || v[i].type == STRING || v[i].type == BOOLEAN) {
-		INode* current = new IValue(QString(key.data()),QString(v[i].value.data()));
+		INode* current = new IValue(QString(key.data()),QString(v[i].value.data()),parent);
 		r = i + 1;
-		last = current;
+		//last = current;
 		return current;
 	}
 
 	if (v[i].type == NUL) {
-		INode* current = new IValue(QString(key.data()), "NULL");
+		INode* current = new IValue(QString(key.data()), "NULL",parent);
 		r = i + 1;
-		last = current;
+	//	last = current;
 		return current;
 	}
 	return nullptr;
