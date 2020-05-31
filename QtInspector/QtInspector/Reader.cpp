@@ -130,35 +130,34 @@ std::vector<Reader::token> Reader::tokenize(std::string source) {
 
 INode* Reader::json_parse(std::vector<token> v, int i, int& r , std::string key,INode* parent) {
 
+	if (i >= v.size())
+		return nullptr;
 	
 	if (v[i].type == CROUSH_OPEN) {
 				
+	
+		IObject* current = new IObject(QString(key.data()),parent);
 		int k = i + 1;
-		IObject* current = new IObject(QString(v[k].value.data()),parent);
-		k = k + 1;
-		while (v[k].type != CROUSH_CLOSE && k < v.size()) {
-
+		while (k < v.size() && v[k].type != CROUSH_CLOSE ) {
 			std::string key = v[k].value;
-			k += 2; 
+			k = k + 2;
 			int j = k;
 			INode* vv = json_parse(v, k, j, key,current);
 			if (vv)
-			{
-				qDebug() << vv->getKey();
 				current->addValue(vv);
-			}
+			else
+				j++;
 			
 			k = j;
-			if (v[k].type == COMMA) k++;
+			if (k < v.size() && v[k].type == COMMA) k++;
 		}
 		r = k + 1;
-		last = current;
 		return current;
 	}
 	if (v[i].type == BRACKET_OPEN) {
 		IArray* current = new IArray(QString(v[i-2].value.data()),parent);
 		int k = i + 1;
-		while (v[k].type != BRACKET_CLOSE && k < v.size() ) {
+		while (k < v.size() && v[k].type != BRACKET_CLOSE  ) {
 			int j = k;
 			INode* vv = json_parse(v, k, j, v[i - 2].value,current);
 			current->addValue(vv);
@@ -166,20 +165,17 @@ INode* Reader::json_parse(std::vector<token> v, int i, int& r , std::string key,
 			if (v[k].type == COMMA) k++;
 		}
 		r = k + 1;
-		//last = current;
 		return current;
 	}
 	if (v[i].type == NUMBER || v[i].type == STRING || v[i].type == BOOLEAN) {
 		INode* current = new IValue(QString(key.data()),QString(v[i].value.data()),parent);
 		r = i + 1;
-		//last = current;
 		return current;
 	}
 
 	if (v[i].type == NUL) {
 		INode* current = new IValue(QString(key.data()), "NULL",parent);
 		r = i + 1;
-	//	last = current;
 		return current;
 	}
 	return nullptr;
@@ -187,8 +183,7 @@ INode* Reader::json_parse(std::vector<token> v, int i, int& r , std::string key,
 
 INode* Reader::parse(const std::string& str) {
 	int k;
-	json_parse(tokenize(str), 0, k);
-	return last;
+	return json_parse(tokenize(str), 0, k);
 }
 INode* Reader::parse_file(const std::string& filename) {
 	std::ifstream in(filename);

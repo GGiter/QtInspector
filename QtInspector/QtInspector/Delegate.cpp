@@ -1,6 +1,7 @@
 #include "Delegate.h"
 #include <QLineEdit>
 #include <QDebug>
+#include "dataTypes.h"
 TestDelegate::TestDelegate(QObject *parent)
 	: QStyledItemDelegate(parent)
 {
@@ -14,7 +15,15 @@ QWidget *TestDelegate::createEditor(QWidget *parent,
 	const QStyleOptionViewItem & option ,
 	const QModelIndex &  index ) const
 {
+	
 	QLineEdit *editor = new QLineEdit(parent);
+
+	editor->setClearButtonEnabled(false);
+
+	INode* node = static_cast<INode*>(index.internalPointer());
+
+	if (node)
+		editor->setText(node->getValue());
 
 	return editor;
 }
@@ -24,23 +33,23 @@ void TestDelegate::setEditorData(QWidget *editor,
 {
 	QString value = index.model()->data(index, Qt::EditRole).toString();
 
-	QLineEdit *spinBox = static_cast<QLineEdit*>(editor);
-	spinBox->setText(value);
+	QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+	lineEdit->setText(value);
 }
 
 void TestDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 	const QModelIndex &index) const
 {
-	QLineEdit *spinBox = static_cast<QLineEdit*>(editor);
+	QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
 
-	QString value = spinBox->text();
+	QString value = lineEdit->text();
 
 	model->setData(index, value, Qt::EditRole);
 }
 
 void TestDelegate::updateEditorGeometry(QWidget *editor,
 	const QStyleOptionViewItem &option,
-	const QModelIndex &/* index */) const
+	const QModelIndex & index ) const
 {
 	editor->setGeometry(option.rect);
 }

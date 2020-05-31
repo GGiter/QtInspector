@@ -105,6 +105,11 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 		return item->getKey();
 	else if (index.column() == 1 && item->getType() == dataType::value)
 		return static_cast<IValue*>(item)->getValue();
+
+	if (role == Qt::DecorationRole)
+	{
+
+	}
 	
 	return QVariant();
 }

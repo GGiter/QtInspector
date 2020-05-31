@@ -2,8 +2,8 @@
     "examples": 
         {
             "tag_name": "a",
-            "this_is": ["array", "of", "strings"],
-            "number_array": [1, 2, 4, 8, 16],
+            "this_is": "test",
+            "number_array": [ 10, 15, 16 ,30 ]
             "pie": 3.14,
             "boolean": true,
             "bug": null,

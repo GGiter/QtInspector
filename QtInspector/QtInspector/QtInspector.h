@@ -16,11 +16,6 @@ public:
 
 	void readJson(QString fileName);
 
-	INode parseJson(QString data);
-
-	void iterateObject(QJsonObject object);
-
-	void iterateArray(QJsonArray array);
 private slots:
 	void OnClick();
 private:

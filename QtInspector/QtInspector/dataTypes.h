@@ -17,6 +17,7 @@ public:
 	QString getKey() const { return key; }
 	dataType getType() const { return type; }
 	virtual void setValue(const QString& v) {}
+	virtual QString getValue() const { return ""; }
 	INode* operator[](int index) { return nullptr; }
 	INode &INode::operator=(const INode & node)
 	{
@@ -50,7 +51,7 @@ class IValue : public INode
 {
 public:
 	IValue(const QString& k, const QString& v, INode* parent = nullptr) : INode(k,dataType::value,parent), value(v) {}
-	QString getValue() const { return value; }
+	QString getValue() const override { return value; }
 	void setValue(const QString& v) override { value = v; }
 	IValue &IValue::operator=(const IValue & node)
 	{

@@ -23,66 +23,11 @@ void QtInspector::readJson(QString fileName)
 {
 	Reader reader;
 	INode* root = reader.parse_file("test.json");
-	qDebug() << "Reading";
-	qDebug() << root->getKey();
-	qDebug() << root->size();
-	if (root->getType() == dataType::object)
-	{
-		qDebug() << "Object";
-	}
 	
-	IObject* root2 = new IObject("Test", { root }, nullptr);
-	root->parent = root2;
-	tModel->root = root2;
+	tModel->root = root;
 	tModel->reset();	
 	ui.treeView->update();
 	
-}
-INode QtInspector::parseJson(QString data)
-{
-	return INode();
-}
-void QtInspector::iterateObject(QJsonObject object)
-{
-	qDebug() << object;
-	for (auto item : object)
-	{
-		if (item.isObject())
-		{
-			iterateObject(item.toObject());
-		}
-		else if (item.isArray())
-		{
-			iterateArray(item.toArray());
-
-		}
-		else
-		{
-			qDebug() << item.toString();
-		}
-	}
-}
-
-void QtInspector::iterateArray(QJsonArray array)
-{
-	qDebug() << array;
-	for (auto item : array)
-	{
-		if (item.isObject())
-		{
-			iterateObject(item.toObject());
-		}
-		else if (item.isArray())
-		{
-			iterateArray(item.toArray());
-
-		}
-		else
-		{	
-			qDebug() << item.toString();
-		}
-	}
-
 }
 void QtInspector::OnClick()
 {
