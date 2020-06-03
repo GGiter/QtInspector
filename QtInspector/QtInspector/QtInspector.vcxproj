@@ -84,7 +84,7 @@
   <ItemGroup>
     <ClCompile Include="Delegate.cpp" />
     <ClCompile Include="Reader.cpp" />
-    <ClCompile Include="TestItemModel.cpp" />
+    <ClCompile Include="TreeModel.cpp" />
     <QtRcc Include="QtInspector.qrc" />
     <QtUic Include="QtInspector.ui" />
     <QtMoc Include="QtInspector.h" />
@@ -95,7 +95,7 @@
     <ClInclude Include="dataTypes.h" />
     <QtMoc Include="Delegate.h" />
     <ClInclude Include="Reader.h" />
-    <QtMoc Include="TestItemModel.h" />
+    <QtMoc Include="TreeModel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

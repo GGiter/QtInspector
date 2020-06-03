@@ -7,6 +7,7 @@
 #include <cstring>
 #include <QString>
 #include <QDebug>
+#include <algorithm>
 #include "Reader.h"
 
 struct Reader::token {
@@ -167,14 +168,28 @@ INode* Reader::json_parse(std::vector<token> v, int i, int& r , std::string key,
 		r = k + 1;
 		return current;
 	}
-	if (v[i].type == NUMBER || v[i].type == STRING || v[i].type == BOOLEAN) {
-		INode* current = new IValue(QString(key.data()),QString(v[i].value.data()),parent);
+	if (v[i].type == NUMBER) {
+		INode* current = nullptr;
+		QString value = QString(v[i].value.data());
+		if(std::find(value.begin(), value.end(),'.') == value.end())
+		current = new IValue(QString(key.data()), value,valueType::INT,parent);
+		else
+		current = new IValue(QString(key.data()), value, valueType::FLOAT, parent);
 		r = i + 1;
 		return current;
 	}
-
+	if (v[i].type == STRING) {
+		INode* current = new IValue(QString(key.data()), QString(v[i].value.data()),valueType::STRING,parent);
+		r = i + 1;
+		return current;
+	}
+	if (v[i].type == BOOLEAN) {
+		INode* current = new IValue(QString(key.data()), QString(v[i].value.data()),valueType::BOOLEAN,parent);
+		r = i + 1;
+		return current;
+	}
 	if (v[i].type == NUL) {
-		INode* current = new IValue(QString(key.data()), "NULL",parent);
+		INode* current = new IValue(QString(key.data()), "NULL",valueType::NUL,parent);
 		r = i + 1;
 		return current;
 	}

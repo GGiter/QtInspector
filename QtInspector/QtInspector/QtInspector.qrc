@@ -1,4 +1,6 @@
 <RCC>
-    <qresource prefix="QtInspector">
+    <qresource prefix="/QtInspector">
+        <file>Resources/object_icon.png</file>
+        <file>Resources/array_icon.png</file>
     </qresource>
 </RCC>

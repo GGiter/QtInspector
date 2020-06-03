@@ -41,10 +41,10 @@
     <ClCompile Include="Reader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestItemModel.cpp">
+    <ClCompile Include="Delegate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Delegate.cpp">
+    <ClCompile Include="TreeModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,10 +60,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="TestItemModel.h">
+    <QtMoc Include="Delegate.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Delegate.h">
+    <QtMoc Include="TreeModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

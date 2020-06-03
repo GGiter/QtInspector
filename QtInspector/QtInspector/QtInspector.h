@@ -14,8 +14,7 @@ class QtInspector : public QMainWindow
 public:
     QtInspector(QWidget *parent = Q_NULLPTR);
 
-	void readJson(QString fileName);
-
+	void readJson(const QString fileName);
 private slots:
 	void OnClick();
 private:

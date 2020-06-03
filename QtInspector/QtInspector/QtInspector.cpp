@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QPushButton>
 #include <fstream>
-#include "TestItemModel.h"
+#include "TreeModel.h"
 #include "Delegate.h"
 
 QtInspector::QtInspector(QWidget *parent)
@@ -19,15 +19,14 @@ QtInspector::QtInspector(QWidget *parent)
 	ui.treeView->setItemDelegate(testDelegate);
 }
 
-void QtInspector::readJson(QString fileName)
+void QtInspector::readJson(const QString fileName)
 {
 	Reader reader;
-	INode* root = reader.parse_file("test.json");
+	INode* root = reader.parse_file(fileName.toStdString());
 	
 	tModel->root = root;
 	tModel->reset();	
 	ui.treeView->update();
-	
 }
 void QtInspector::OnClick()
 {

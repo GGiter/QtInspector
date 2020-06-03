@@ -21,7 +21,7 @@
     <item row="1" column="0">
      <widget class="QPushButton" name="pushButton">
       <property name="text">
-       <string>PushButton</string>
+       <string>Populate</string>
       </property>
      </widget>
     </item>

@@ -1,6 +1,7 @@
-#include "TestItemModel.h"
+#include "TreeModel.h"
 #include <QStringList>
 #include <QDebug>
+#include <QIcon>
 
 
 TreeModel::TreeModel(QObject *parent)
@@ -30,7 +31,7 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
 
 	
 
-	INode *childItem = parentItem->child(row);
+	INode *childItem = (*parentItem)[row];
 	if (childItem)
 		return createIndex(row, column, childItem);
 	else
@@ -96,20 +97,32 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 	if (!index.isValid())
 		return QVariant();
 
-	if (role != Qt::DisplayRole)
-		return QVariant();
-
 	INode *item = static_cast<INode*>(index.internalPointer());
+	
+	if (role == Qt::DecorationRole)
+	{
+		if(index.column() == 0)
+		{
+			switch(item->getType())
+			{
+			case dataType::object:
+				return QIcon(":/QtInspector/Resources/object_icon.png");
+			case dataType::array:
+				return QIcon(":/QtInspector/Resources/array_icon.png");		
+			}
+		}
+			
+	}
+
+	if (!(role == Qt::DisplayRole || role == Qt::EditRole))
+		return QVariant();
 
 	if (index.column() == 0)
 		return item->getKey();
 	else if (index.column() == 1 && item->getType() == dataType::value)
 		return static_cast<IValue*>(item)->getValue();
 
-	if (role == Qt::DecorationRole)
-	{
-
-	}
+	
 	
 	return QVariant();
 }
@@ -125,12 +138,9 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 	}
 
 	return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
-
-
 }
 
-QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
-	int role) const
+QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
 	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
 		if (section == 0)
